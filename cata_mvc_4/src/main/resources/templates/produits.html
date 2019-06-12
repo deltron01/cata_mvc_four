@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout">
+<head>
+<meta charset="utf-8" />
+<title>Produits</title>
+<link rel="stylesheet" type="text/css" href="../static/css/bootstrap.min.css"
+            th:href="@{css/bootstrap.min.css}" />  <!-- dans XHTML toute balise DOIT être fermée -->
+</head>
+<body>
+  <p></p>
+  <div class="container" layout:fragment="content">
+  <div class="container"> <!-- class container pur faire une marge à gauche et à droite -->
+    <form th:action="@{index}" method="get">
+      <label>Mot Clé : </label>
+      <input type="text" name="motCle" th:value="${motCle}"/>
+      <button class="btn btn-primary">Chercher</button>
+    </form>
+  </div>
+  <div class="container">
+   <h3>Liste des produits</h3>
+   <table class="table">
+     <thead>
+       <tr>
+         <th>ID</th><th>Designation</th><th>Prix</th><th>Quantité</th>
+       </tr>
+     </thead>
+     <tbody>
+       <tr th:each="p:${listproduits}"> <!-- on utilise ${} à chaque fois qu'on veut accéder à un attribut dans le Model (MVC) -->
+         <td th:text="${p.id}"></td>
+         <td th:text="${p.designation}"></td>
+         <td th:text="${p.prix}"></td>
+         <td th:text="${p.quantite}"></td>
+         <td><a th:href="@{edit(id=${p.id})}">Edit</a></td>
+         <td><a onclick="return confirm('Etes-vous sûr de vouloir supprimer ?')" th:href="@{delete(id=${p.id})}">Delete</a></td>
+       </tr>
+     </tbody>
+   </table>
+  </div>
+  <div class="container">
+   <ul class="nav nav-pills">
+    <li th:class="${pageCourante}==${status.index}?'active':''" th:each="pa, status:${pages}" ><a th:href="@{index(page=${status.index},size=${size}, motCle=${motCle})}" th:text="${status.index}"></a></li>
+   </ul> <!-- status est une propriété du tableau qui contient des informations y compris l'index de l'élément du tableau -->
+  </div>
+  </div>
+</body>
+</html>
